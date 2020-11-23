@@ -93,10 +93,10 @@ prepare_data <- function(city)
   listings$id <- as.integer(listings$id)
   listings_cleansed <- listings %>% left_join(calendar, by = c("id" = "listing_id"))
   
-  dir.create(file.path("..","Data","data_cleansed2", city, my_row$data_date), recursive = TRUE)
+  dir.create(file.path("..","Data","data_cleansed", city, my_row$data_date), recursive = TRUE)
   
-  write.csv(listings_cleansed, file.path("..","Data","data_cleansed2", city, my_row$data_date, "listings.csv"))
-  print(paste0("saving data into ", file.path("..","Data","data_cleansed2", city, my_row$data_date, "listings.csv")))
+  write.csv(listings_cleansed, file.path("..","Data","data_cleansed", city, my_row$data_date, "listings.csv"))
+  print(paste0("saving data into ", file.path("..","Data","data_cleansed", city, my_row$data_date, "listings.csv")))
   }
 }
  
@@ -130,7 +130,7 @@ files_paths <- c()
 
 # Read data in cities between min_date and max_date
 for(city in cities){
-  file_dir <- file.path("..","Data", "data_cleansed2", city)
+  file_dir <- file.path("..","Data", "data_cleansed", city)
   file_subdirs <- list.dirs(file_dir)
   file_subdirs <- file_subdirs[-1]
   
@@ -168,8 +168,8 @@ listings$price_30 <- ifelse(is.na(listings$price_30), "0", listings$price_30)
 
 View(listings)
 
-write.csv(listings, file.path("..","Data","listings2.csv"))
-print(paste0("saving data into ", file.path("..","Data","data_cleansed2", "listings2.csv")))
+write.csv(listings, file.path("..","Data","listings.csv"))
+print(paste0("saving data into ", file.path("..","Data","data_cleansed", "listings2.csv")))
 
 
 
