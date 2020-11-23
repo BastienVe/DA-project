@@ -41,7 +41,7 @@ shinyUI( dashboardPage(skin = "yellow",
                     h1("Welcome on our Dash Board ! ", style="font-family: 'Gill Sans', sans-serif; font-weight:bold;"),
                     h2("Presentation", style="font-family: 'Gill Sans', sans-serif;text-decoration: underline;"),
                     p(
-                        "We are 3 students working on an Analytic project. We designed for you a dashboard which allows you to visualize some Airbnb data !"
+                        "We are 3 students working on an Analytic project. We designed for you a dashboard which allows to visualize some Airbnb data !"
                     ),
                     p(
                         "This is a simple shiny application. Choose cities you want to compare, select the place you want to visit. Enjoy ! "
@@ -56,10 +56,21 @@ shinyUI( dashboardPage(skin = "yellow",
                     p(
                         "First, select all the cities you want to analyze. You'll see some Graphs concerning availabilty and revenue about all the appartments in the cities choosen.  "
                     ),
-                    p(
-                        img(src = "comparator.png", height = 300),
-                        align = "center"
+                    fluidRow(
+                        box(
+                            img(src = "comparator.png", height = 270),
+                        ),
+                        box(
+                            img(src = "comparator2.png", height = 270)
+                        )
                     ),
+                    h3("Some rankings", style="font-family: 'Gill Sans', sans-serif;text-decoration: underline;"),
+                    
+                    p("Nothing difficult here, select a city and have a look and the five first cities depending of some features."),
+                    fluidRow(
+                            column( 12,align="center" ,img(src = "top.png", height = 270))
+                    ),
+                    
                     h3("Deep dive into one city", style="font-family: 'Gill Sans', sans-serif;text-decoration: underline;"),
                     p(
                         "Your choice for the next hollydays may be already done. No problem, you will be able to get more information about this city."
@@ -71,6 +82,19 @@ shinyUI( dashboardPage(skin = "yellow",
                         img(src = "city.png", height = 300),
                         align = "center"
                     ),
+                    
+                    h3("Map", style="font-family: 'Gill Sans', sans-serif;text-decoration: underline;"),
+                    p(
+                        "If you want to have a global look on available places in a city, use our Leaflet map ! "
+                    ),
+                    p(
+                        "Select the city and features and visualize every places ! Don't forget to to click on the cursors to get more information !"
+                    ),
+                    fluidRow(
+                        column( 12,align="center" ,img(src = "map.png", height = 270))
+                    ),
+                    
+                    
                     
         ),
             tabItem(tabName = "comparing_cities",

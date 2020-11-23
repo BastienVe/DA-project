@@ -4,28 +4,36 @@ library(ggplot2)
 library(data.table)
 
 
+
 # a generic function to prepare data for a specific city, data_date
-prepare_data <- function(city, data_date)
+prepare_data <- function(city)
 {
+  data_filtered <- all_data %>% filter(city == my_city)
+  data_filtered <-data_filtered[order(data_filtered$data_date, decreasing = TRUE),]
+  
+  for(j in 1:3){
+    
+    my_row <- data_filtered[j,]
+    print(my_row$listings_url)
+  
+  
   # Cleaning listings dataframe
   
-  # suppose raw data is stored in city/listings.csv
-  listings_url <- file.path("..","Data",city,data_date,"listings.csv")
-  # suppose raw data is stored in city/calendar.csv
-  calendar_url <- file.path("..","Data",city,data_date,"calendar.csv")
-  
-  print(paste0("reading data from ", listings_url))
-  listings <- read.csv(listings_url)
-  print(paste0("reading data from ", calendar_url))
-  calendar <- read.csv(calendar_url)
+  print(paste0("reading data from ", my_row$listings_url))
+    
+  listings <- read.csv(textConnection(readLines(gzcon(url(my_row$listings_url)))))
+  print(paste0("reading data from ", my_row$calendar_url))
+  calendar <-  read.csv(textConnection(readLines(gzcon(url(my_row$calendar_url)))))
   
   ## Add Keys: columns city and day date
-  listings$city <- city
-  listings$data_date <- data_date
+  listings$city <- my_row$city
+  listings$country <- my_row$country
+  listings$data_date <- my_row$data_date
   
+
   ## Select interesting columns
   ### Most columns don't contain interesting information
-  columns_listings <- c("city", "data_date", "id", "neighbourhood_cleansed", 
+  columns_listings <- c("country", "city","listing_url","data_date", "id", "neighbourhood_cleansed", 
                         "latitude", "longitude", 
                         "property_type", "room_type", "accommodates", "bedrooms", 
                         "beds", "price", "minimum_nights",  "maximum_nights")
@@ -82,47 +90,47 @@ prepare_data <- function(city, data_date)
               #revenue_90 = sum(revenue[day_nb<=90], na.rm = TRUE),
               #revenue_365 = sum(revenue[day_nb<=365], na.rm = TRUE)           
     )
-  
+  listings$id <- as.integer(listings$id)
   listings_cleansed <- listings %>% left_join(calendar, by = c("id" = "listing_id"))
   
-  dir.create(file.path("..","Data","data_cleansed", city, data_date), recursive = TRUE)
+  dir.create(file.path("..","Data","data_cleansed2", city, my_row$data_date), recursive = TRUE)
   
-  write.csv(listings_cleansed, file.path("..","Data","data_cleansed", city, data_date, "listings.csv"))
-  print(paste0("saving data into ", file.path("..","Data","data_cleansed", city, data_date, "listings.csv")))
-}  
+  write.csv(listings_cleansed, file.path("..","Data","data_cleansed2", city, my_row$data_date, "listings.csv"))
+  print(paste0("saving data into ", file.path("..","Data","data_cleansed2", city, my_row$data_date, "listings.csv")))
+  }
+}
+ 
 
 
-# Example: Prepare data for multiple cities
 
-cities <- c("malaga", "mallorca", "sevilla")
-data_dates <- c("2020-06-30", "2020-09-19", "2020-06-29")
+cities <- c("austin", "bordeaux", "cambridge", "malaga", "mallorca", "sevilla")
+
+
+all_data <-read.csv("../Data/all_data.csv")
+
 
 for(i in 1:length(cities)){
-  city <- cities[i]
-  data_date <- data_dates[i]
+  my_city <- cities[i]
   print("-------------------------------------------------")
-  print(paste(c("Preparing data for", city, "compiled at", data_date), collapse = " "))
-  prepare_data(city, data_date)
+  print(paste(c("Preparing data for", my_city), collapse = " "))
+  prepare_data(my_city)
 }
 
 # Clean Environment
 rm(list=ls())
+  
 
-# Reading cleansed data
-
-
-cities <- c("malaga", "mallorca", "sevilla")
-data_dates <- c("2020-06-30", "2020-09-19", "2020-06-29")
+cities <- c("austin", "bordeaux", "cambridge", "malaga", "mallorca", "sevilla")
 
 # We are only interested in data between min_date and max_date
-min_date <- '2020-05-01'
-max_date <- '2020-11-01'
+min_date <- '2020-01-01'
+max_date <- '2020-12-31'
 
 files_paths <- c()
 
 # Read data in cities between min_date and max_date
 for(city in cities){
-  file_dir <- file.path("..","Data", "data_cleansed", city)
+  file_dir <- file.path("..","Data", "data_cleansed2", city)
   file_subdirs <- list.dirs(file_dir)
   file_subdirs <- file_subdirs[-1]
   
@@ -132,19 +140,37 @@ for(city in cities){
   }
   files_paths <- c(files_paths, file_subdirs)
 }
+
 files_paths <- file.path(files_paths, "listings.csv")
 listings <- 
   do.call(rbind,
           lapply(files_paths, read.csv, row.names=1))
 
-## Preprocess
-listings$bedrooms <- ifelse(listings$bedrooms >= 5, "5+", listings$bedrooms)
-listings$price_30 <- ifelse(is.na(listings$price_30), "0", listings$price_30)
 
-write.csv(listings, file.path("..","Data","listings.csv"))
-print(paste0("saving data into ", file.path("..","Data","listings.csv")))
+## Preprocess
+listings$room_type <- ifelse(listings$room_type != "Entire home/apt" & listings$room_type != "Hotel room" & listings$room_type != "Private room" & listings$room_type != "Shared room", "Undefined", listings$room_type)
+listings$bedrooms <- ifelse(listings$bedrooms != "4" & listings$bedrooms != "3" & listings$bedrooms != "2" & listings$bedrooms != "1", "5+", listings$bedrooms)
+
+
+
+listings$longitude <- as.numeric(listings$longitude)
+listings$latitude <- as.numeric(listings$latitude)
+listings$longitude <- ifelse(listings$longitude>2000,-97.5,listings$longitude)
+listings$latitude <- ifelse(is.na(listings$latitude),30.2,listings$latitude)
 
 View(listings)
+
+listings$availability_30 <- ifelse(is.na(listings$availability_30),0,listings$availability_30)
+listings$revenue_30 <- ifelse(is.na(listings$revenue_30),0,listings$revenue_30)
+
+
+listings$price_30 <- ifelse(is.na(listings$price_30), "0", listings$price_30)
+
+View(listings)
+
+write.csv(listings, file.path("..","Data","listings2.csv"))
+print(paste0("saving data into ", file.path("..","Data","data_cleansed2", "listings2.csv")))
+
 
 
 
