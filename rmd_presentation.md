@@ -57,6 +57,7 @@ Availability
 
 
 ```r
+p<-ggplot(data=average_availability, aes(x=city, y=average_availability_30,fill=city)) + geom_bar(stat="identity", position=position_dodge())+geom_text(aes(label=average_availability_30), vjust=1.6, color="white",position = position_dodge(0.9), size=3.5) +scale_fill_brewer(palette="Blues")
 plot(p)
 ```
 
