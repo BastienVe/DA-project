@@ -11,24 +11,44 @@ library(dplyr)
 library(stringr)
 library(ggplot2)
 library(data.table)
+library(leaflet)
 
-listings <- read.csv("../Data/listings2.csv")
+
+listings <- read.csv("../Data/listings.csv")
 
 
 ```
 Introduction
 ========================================================
 
-Information about the project :
+**Information about the project :**
+ 
+- Language : R
 
 - Shiny application
+
+
+- Ui/Server application
+
+
 - Airbnb data from : http://insideairbnb.com/ 
+
+
+Airbnb Data
+========================================================
+**Where ?**
 - Different places : France (Bordeaux), USA(Cambridge, Austin), Spain (Mallorca, Sevilla, Malaga)
-- 3 dates for each city
+
+**When ?**
+
+- The last 3 dates from the website
+
+**What ?**
 - Information : availabitlity, revenue, price, location, neighbourhood, URL
 - Features : room type (hotel, appartment), number of bedrooms, neighbouhood etc.
 
 So first, lets have a look and the app's structure : 
+
 
 
 Structure
@@ -41,9 +61,8 @@ Features selection
 ========================================================
 ![Structure](www/selectCity.png)  ![Structure](www/selectFeatures.png)
 
-Information available
+Availability
 ========================================================
-- Availability :
 
 ```{r, echo=FALSE, out.width="600px"}
 average_availability <- listings %>% filter(city %in% c("austin", "bordeaux","malaga", "mallorca")) %>% group_by(city) %>%
@@ -56,9 +75,8 @@ plot(p)
 
 ```
 
-Information available
+Availability with features :
 ========================================================
-- Availability with features :
 
 ```{r, echo=FALSE }
 
@@ -72,4 +90,47 @@ p2<-ggplot(data=average_availability_bedrooms, aes(x=city, y=average_availabilit
 plot(p2)
 
 ```
+
+Other graphics :
+========================================================
+
+**Boxplot :**
+
+```{r, echo=FALSE }
+
+distribution_availability <-listings %>% filter(city %in% c("austin", "bordeaux","cambridge"))
+
+ p3 <- ggplot(distribution_availability, aes(city, availability_30))+ geom_boxplot(aes(fill = room_type),outlier.shape = NA) +
+                    scale_y_continuous(limits = quantile(listings$availability_30, c(0.1, 0.9), na.rm = T)) + scale_fill_brewer(palette="Blues")
+
+```
+
+```{r, out.width="500px"}
+plot(p3)
+
+```
+
+Other graphics :
+========================================================
+
+**Lets call it** ***Cheese graphic*** :
+
+```{r, echo=FALSE }
+
+bedrooms_pie <-listings %>% filter(city %in% c("malaga")) %>% group_by(bedrooms) %>% summarise(count=n())%>% transmute(bedrooms, percent = round(count/sum(count),3)*100)
+
+ p4<-ggplot(data=bedrooms_pie, aes(x="malaga", y=percent,fill=bedrooms)) + geom_bar(stat="identity")+
+            geom_text(aes(label=percent), vjust=1.6, color="black",position = position_dodge(0.9), size=2.9)
+        pie <- p4 + coord_polar("y", start=0) +scale_fill_brewer(palette="Blues")
+
+```
+
+```{r, out.width="500px"}
+plot(pie)
+
+```
+
+Leaflet Map :
+========================================================
+![Structure](www/leaflet.png)
 

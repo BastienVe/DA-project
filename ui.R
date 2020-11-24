@@ -142,7 +142,7 @@ shinyUI( dashboardPage(skin = "yellow",
                             
                         ),
                         box(
-                            title = "Top 5 revenues", status = "primary", solidHeader = TRUE,
+                            title = "Top 5 lower revenues", status = "primary", solidHeader = TRUE,
                             column( 12,align="center" ,tableOutput("top_revenue"))
                         )
      

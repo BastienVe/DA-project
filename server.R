@@ -129,16 +129,16 @@ shinyServer(function(input, output) {
     #TOP INFORMATION
     
     top_price <- reactive ({
-        head(listings %>% select("country","city","listing_url","room_type","bedrooms","price_30") %>% filter(city==input$selectCityTop & price_30>0) %>% arrange(price_30) %>% group_by(country,city,listing_url,room_type,bedrooms,price_30) %>% summarize(), 5)
+        head(listings %>% select("country","city","listing_url","room_type","bedrooms","price_30") %>% filter(city==input$selectCityTop & price_30>5) %>% group_by(country,city,listing_url,room_type,bedrooms,price_30) %>% summarize() %>% arrange(price_30), 5)
     })
     top_revenue <- reactive ({
-        head(listings %>% select("country","city","listing_url","room_type","bedrooms","revenue_30") %>% filter(city==input$selectCityTop)%>% group_by(country,city,listing_url,room_type,bedrooms,revenue_30) %>% summarize() %>% arrange(desc(revenue_30)) , 5) 
+        head(listings %>% select("country","city","listing_url","room_type","bedrooms","revenue_30") %>% filter(city==input$selectCityTop& revenue_30>0)%>% group_by(country,city,listing_url,room_type,bedrooms,revenue_30) %>% summarize() %>% arrange(revenue_30) , 5) 
     })
     top_available <- reactive ({
-        head(listings %>% select("country","city","listing_url","room_type","bedrooms","availability_30") %>% filter(city==input$selectCityTop)%>% group_by(country,city,listing_url,room_type,bedrooms,availability_30) %>% summarize() %>% arrange(desc(availability_30)) , 5) 
+        head(listings %>% select("country","city","listing_url","room_type","bedrooms","availability_30") %>% filter(city==input$selectCityTop & availability_30<30)%>% group_by(country,city,listing_url,room_type,bedrooms,availability_30) %>% summarize() %>% arrange(desc(availability_30)) , 5) 
     })
     top_nights <- reactive ({
-        head(listings %>% select("country","city","listing_url","room_type","bedrooms","maximum_nights") %>% filter(city==input$selectCityTop)%>% group_by(country,city,room_type,bedrooms,maximum_nights) %>% summarize() %>% arrange(desc(maximum_nights)) , 5) 
+        head(listings %>% select("country","city","listing_url","room_type","bedrooms","maximum_nights") %>% filter(city==input$selectCityTop & maximum_nights<99)%>% group_by(country,city,room_type,bedrooms,maximum_nights) %>% summarize() %>% arrange(desc(maximum_nights)) , 5) 
     })
     
     output$top_price <- renderTable(
@@ -177,7 +177,7 @@ shinyServer(function(input, output) {
     
     output$date_range <- renderText({
         
-        paste("Date Range for", input$selectCityOne, ":", min_date()[1,1], "to", max_date()[1,1])
+        paste("Dates for", input$selectCityOne, ":", min_date()[1,1], " / ", min_date()[2,1], " / ", max_date()[1,1])
     })
     
     average_availability_One <-reactive({ 

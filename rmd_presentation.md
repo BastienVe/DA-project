@@ -10,16 +10,34 @@ autosize: true
 Introduction
 ========================================================
 
-Information about the project :
+**Information about the project :**
+ 
+- Language : R
 
 - Shiny application
+
+
+- Ui/Server application
+
+
 - Airbnb data from : http://insideairbnb.com/ 
+
+
+Airbnb Data
+========================================================
+**Where ?**
 - Different places : France (Bordeaux), USA(Cambridge, Austin), Spain (Mallorca, Sevilla, Malaga)
-- 3 dates for each city
+
+**When ?**
+
+- The last 3 dates from the website
+
+**What ?**
 - Information : availabitlity, revenue, price, location, neighbourhood, URL
 - Features : room type (hotel, appartment), number of bedrooms, neighbouhood etc.
 
 So first, lets have a look and the app's structure : 
+
 
 
 Structure
@@ -32,9 +50,8 @@ Features selection
 ========================================================
 ![Structure](www/selectCity.png)  ![Structure](www/selectFeatures.png)
 
-Information available
+Availability
 ========================================================
-- Availability :
 
 
 
@@ -45,9 +62,8 @@ plot(p)
 
 ![plot of chunk unnamed-chunk-3](rmd_presentation-figure/unnamed-chunk-3-1.png)
 
-Information available
+Availability with features :
 ========================================================
-- Availability with features :
 
 
 
@@ -57,4 +73,36 @@ plot(p2)
 ```
 
 <img src="rmd_presentation-figure/unnamed-chunk-5-1.png" title="plot of chunk unnamed-chunk-5" alt="plot of chunk unnamed-chunk-5" width="500px" />
+
+Other graphics :
+========================================================
+
+**Boxplot :**
+
+
+
+
+```r
+plot(p3)
+```
+
+<img src="rmd_presentation-figure/unnamed-chunk-7-1.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" width="500px" />
+
+Other graphics :
+========================================================
+
+**Lets call it** ***Cheese graphic*** :
+
+
+
+
+```r
+plot(pie)
+```
+
+<img src="rmd_presentation-figure/unnamed-chunk-9-1.png" title="plot of chunk unnamed-chunk-9" alt="plot of chunk unnamed-chunk-9" width="500px" />
+
+Leaflet Map :
+========================================================
+![Structure](www/leaflet.png)
 
