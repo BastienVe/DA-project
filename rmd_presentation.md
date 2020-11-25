@@ -54,10 +54,12 @@ Availability
 ========================================================
 
 
-
++ ggplot() 
++ geom_bar() 
++ geom_text() 
++ scale_fill_brewer(palette="Blues")
 
 ```r
-p<-ggplot(data=average_availability, aes(x=city, y=average_availability_30,fill=city)) + geom_bar(stat="identity", position=position_dodge())+geom_text(aes(label=average_availability_30), vjust=1.6, color="white",position = position_dodge(0.9), size=3.5) +scale_fill_brewer(palette="Blues")
 plot(p)
 ```
 
@@ -67,7 +69,10 @@ Availability with features :
 ========================================================
 
 
-
++ ggplot(fill=bedrooms) 
++ geom_bar() 
++ geom_text() 
++ scale_fill_brewer(palette="Blues")
 
 ```r
 plot(p2)
@@ -81,7 +86,10 @@ Other graphics :
 **Boxplot :**
 
 
-
++ ggplot()
++ geom_boxplot() 
++ scale_y_continuous() 
++ scale_fill_brewer(palette="Blues")
 
 ```r
 plot(p3)
@@ -95,7 +103,11 @@ Other graphics :
 **Lets call it** ***Cheese graphic*** :
 
 
-
++ ggplot() 
++ geom_bar()
++ geom_text()
++ coord_polar("y", start=0) 
++ scale_fill_brewer(palette="Blues")
 
 ```r
 plot(pie)

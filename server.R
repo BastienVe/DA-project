@@ -175,22 +175,42 @@ shinyServer(function(input, output) {
         listings %>% filter(city %in% input$selectCityOne) %>% group_by(data_date)%>% summarise() %>% arrange(desc(data_date))
     })
     
-    output$date_range <- renderText({
-        
-        paste("Dates for", input$selectCityOne, ":", min_date()[1,1], " / ", min_date()[2,1], " / ", max_date()[1,1])
+    
+    output$date_range <- renderUI({
+        checkboxGroupInput("selectDate", 
+                           label="Select the date : ", 
+                           choices = c(unique(min_date()[[1]])), inline = TRUE)
     })
     
+    
     average_availability_One <-reactive({ 
-        listings %>% filter(city == input$selectCityOne) %>% group_by(city) %>%
-            summarise(average_availability_30=round(mean(availability_30),2))
+        if(is.null(input$selectDate)){
+            listings %>% filter(city == input$selectCityOne) %>% group_by(city) %>%
+                summarise(average_availability_30=round(mean(availability_30),2))
+        }else{
+            listings %>% filter(city == input$selectCityOne & data_date %in% input$selectDate) %>% group_by(city) %>%
+                summarise(average_availability_30=round(mean(availability_30),2))
+        }
+        
     })
-    average_availability_bedrooms_One <-reactive({ 
-        listings %>% filter(city == input$selectCityOne) %>% group_by(city,bedrooms) %>%
-            summarise(average_availability_30=round(mean(availability_30),2))
+    average_availability_bedrooms_One <-reactive({
+        if(is.null(input$selectDate)){
+            listings %>% filter(city == input$selectCityOne) %>% group_by(city,bedrooms) %>%
+                summarise(average_availability_30=round(mean(availability_30),2))
+        }else{
+            listings %>% filter(city == input$selectCityOne & data_date %in% input$selectDate) %>% group_by(city,bedrooms) %>%
+                summarise(average_availability_30=round(mean(availability_30),2))
+        }
     })
-    average_availability_type_One <-reactive({ 
-        listings %>% filter(city == input$selectCityOne) %>% group_by(city,room_type) %>%
-            summarise(average_availability_30=round(mean(availability_30),2))
+    average_availability_type_One <-reactive({
+        if(is.null(input$selectDate)){
+            listings %>% filter(city == input$selectCityOne) %>% group_by(city,room_type) %>%
+                summarise(average_availability_30=round(mean(availability_30),2))
+        }else{
+            listings %>% filter(city == input$selectCityOne & data_date %in% input$selectDate) %>% group_by(city,room_type) %>%
+                summarise(average_availability_30=round(mean(availability_30),2))
+        }
+        
     })
     
     output$plot3 <- renderPlot({
@@ -211,17 +231,33 @@ shinyServer(function(input, output) {
         
     })
     
-    average_revenue_One <-reactive({ 
-        listings %>% filter(city == input$selectCityOne) %>% group_by(city) %>%
-            summarise(average_revenue_30=round(mean(revenue_30),2))
+    average_revenue_One <-reactive({
+        if(is.null(input$selectDate)){
+            listings %>% filter(city == input$selectCityOne) %>% group_by(city) %>%
+                summarise(average_revenue_30=round(mean(revenue_30),2))
+        }else{
+            listings %>% filter(city == input$selectCityOne & data_date %in% input$selectDate) %>% group_by(city) %>%
+                summarise(average_revenue_30=round(mean(revenue_30),2))
+        }
+        
     })
-    average_revenue_bedrooms_One <-reactive({ 
-        listings %>% filter(city == input$selectCityOne) %>% group_by(city,bedrooms) %>%
-            summarise(average_revenue_30=round(mean(revenue_30),2))
+    average_revenue_bedrooms_One <-reactive({
+        if(is.null(input$selectDate)){
+            listings %>% filter(city == input$selectCityOne) %>% group_by(city,bedrooms) %>%
+                summarise(average_revenue_30=round(mean(revenue_30),2))
+        }else{
+            listings %>% filter(city == input$selectCityOne & data_date %in% input$selectDate) %>% group_by(city,bedrooms) %>%
+                summarise(average_revenue_30=round(mean(revenue_30),2))
+        }
     })
-    average_revenue_type_One <-reactive({ 
-        listings %>% filter(city == input$selectCityOne) %>% group_by(city,room_type) %>%
-            summarise(average_revenue_30=round(mean(revenue_30),2))
+    average_revenue_type_One <-reactive({
+        if(is.null(input$selectDate)){
+            listings %>% filter(city == input$selectCityOne) %>% group_by(city,room_type) %>%
+                summarise(average_revenue_30=round(mean(revenue_30),2))
+        }else{
+            listings %>% filter(city == input$selectCityOne & data_date %in% input$selectDate) %>% group_by(city,room_type) %>%
+                summarise(average_revenue_30=round(mean(revenue_30),2))
+        }
     })
     
     output$plot4 <- renderPlot({
@@ -243,7 +279,11 @@ shinyServer(function(input, output) {
     })
     
     room_type_pie <- reactive ({
-        listings %>% filter(city %in% input$selectCityOne) %>% group_by(room_type) %>% summarise(count=n()) %>% transmute(room_type, percent = round(count/sum(count),3)*100)
+        if(is.null(input$selectDate)){
+            listings %>% filter(city %in% input$selectCityOne) %>% group_by(room_type) %>% summarise(count=n()) %>% transmute(room_type, percent = round(count/sum(count),3)*100)
+        }else{
+            listings %>% filter(city %in% input$selectCityOne & data_date %in% input$selectDate) %>% group_by(room_type) %>% summarise(count=n()) %>% transmute(room_type, percent = round(count/sum(count),3)*100)
+        }
         })
     output$pie_room_type <- renderPlot({
         p<-ggplot(data=room_type_pie(), aes(x=input$selectCityOne, y=percent,fill=room_type)) + geom_bar(stat="identity")+
@@ -253,7 +293,12 @@ shinyServer(function(input, output) {
     })
     
     bedrooms_pie <- reactive ({
-        listings %>% filter(city %in% input$selectCityOne) %>% group_by(bedrooms) %>% summarise(count=n())%>% transmute(bedrooms, percent = round(count/sum(count),3)*100)
+        if(is.null(input$selectDate)){
+            listings %>% filter(city %in% input$selectCityOne) %>% group_by(bedrooms) %>% summarise(count=n())%>% transmute(bedrooms, percent = round(count/sum(count),3)*100)
+        }else{
+            listings %>% filter(city %in% input$selectCityOne & data_date %in% input$selectDate) %>% group_by(bedrooms) %>% summarise(count=n())%>% transmute(bedrooms, percent = round(count/sum(count),3)*100)
+        }
+        
     })
     output$pie_bedrooms <- renderPlot({
         p<-ggplot(data=bedrooms_pie(), aes(x=input$selectCityOne, y=percent,fill=bedrooms)) + geom_bar(stat="identity")+

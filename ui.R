@@ -104,7 +104,7 @@ shinyUI( dashboardPage(skin = "yellow",
                         helpText("In this little dashboard, you will be able to compare some cities. Choose them carefully and add some dimensions to your analyze if you want. Enjoy !"),
                         checkboxGroupInput("selectCity", 
                                            label="Select cities you want to analyze : ", 
-                                           choices = c(unique(listings$city)), inline = TRUE)
+                                           choices = c(unique(listings$city)), inline = TRUE,selected = c("austin","bordeaux","cambridge"))
                     ),
                     box(
                         title = "Criteria", status = "warning", solidHeader = TRUE,
@@ -167,8 +167,7 @@ shinyUI( dashboardPage(skin = "yellow",
                         selectInput("selectCountryOne",label = "Choose the country : ", 
                                     choices = c(unique(listings$country)), selected = "france"),
                         htmlOutput("city_selection"),
-                        textOutput("date_range"),
-                        htmlOutput("date_selection")
+                        htmlOutput("date_range"),
                     )
                 ),
                 fluidRow(
