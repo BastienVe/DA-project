@@ -14,7 +14,7 @@ library(data.table)
 library(leaflet)
 
 
-listings <- read.csv("../Data/listings.csv")
+listings <- read.csv("../../Data/listings.csv")
 
 
 ```

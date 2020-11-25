@@ -12,6 +12,9 @@ library(dplyr)
 library(stringr)
 library(ggplot2)
 library(data.table)
+library(rsconnect)
+
+rsconnect::deployApp()
 
 
 # Define server logic required to draw a histogram
