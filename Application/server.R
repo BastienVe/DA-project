@@ -14,7 +14,6 @@ library(ggplot2)
 library(data.table)
 library(rsconnect)
 
-rsconnect::deployApp()
 
 
 # Define server logic required to draw a histogram
@@ -182,7 +181,7 @@ shinyServer(function(input, output) {
     output$date_range <- renderUI({
         checkboxGroupInput("selectDate", 
                            label="Select the date : ", 
-                           choices = c(unique(min_date()[[1]])), inline = TRUE)
+                           choices = c(unique(min_date()[[1]])))
     })
     
     

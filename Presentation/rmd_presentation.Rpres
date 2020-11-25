@@ -16,7 +16,6 @@ library(leaflet)
 
 listings <- read.csv("../../Data/listings.csv")
 
-
 ```
 Introduction
 ========================================================
