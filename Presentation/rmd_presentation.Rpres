@@ -136,7 +136,7 @@ Other graphics :
 ```{r, echo=FALSE }
 
 bedrooms_pie <-listings %>% filter(city %in% c("malaga")) %>% group_by(bedrooms) %>% summarise(count=n())%>% transmute(bedrooms, percent = round(count/sum(count),3)*100)
-
+  
  p4<-ggplot(data=bedrooms_pie, aes(x="malaga", y=percent,fill=bedrooms)) + geom_bar(stat="identity")+
             geom_text(aes(label=percent), vjust=1.6, color="black",position = position_dodge(0.9), size=2.9)
         pie <- p4 + coord_polar("y", start=0) +scale_fill_brewer(palette="Blues")
