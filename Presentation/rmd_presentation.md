@@ -38,6 +38,14 @@ Airbnb Data
 
 So first, lets have a look and the app's structure : 
 
+Data Preparation
+========================================================
+**Preprocessing script :**
+- Room Type column cleanning (wrong values ...)
+- Bedrooms column cleanning (1, 2, 3, 4, 5+)
+- Type correction for longitude/latitude (numeric values)
+- Data cleaning for longitude/latitude
+- NA values for availability, revenue and price
 
 
 Structure
@@ -100,7 +108,7 @@ plot(p3)
 Other graphics :
 ========================================================
 
-**Lets call it** ***Cheese graphic*** :
+**Pie chart** :
 
 
 + ggplot() 
