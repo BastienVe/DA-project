@@ -44,10 +44,10 @@ shinyUI( dashboardPage(skin = "yellow",
                         "We are 3 students working on an Analytic project. We designed for you a dashboard which allows to visualize some Airbnb data !"
                     ),
                     p(
-                        "This is a simple shiny application. Choose cities you want to compare, select the place you want to visit. Enjoy ! "
+                        "This is a simple shiny application. Choose cities you want to compare and select the place you want to visit. Enjoy ! "
                     ),
                     p(
-                        "Fist, let's have a look on some instructions ! "
+                        "First, let's have a look on some instructions ! "
                     ),
                     h3("Comparing different cities", style="font-family: 'Gill Sans', sans-serif;text-decoration: underline;"),
                     p(

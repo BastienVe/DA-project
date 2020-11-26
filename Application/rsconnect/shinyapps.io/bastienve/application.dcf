@@ -5,6 +5,6 @@ account: bastienve
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 3300955
-bundleId: 3904918
+bundleId: 3908338
 url: https://bastienve.shinyapps.io/application/
-when: 1606315419.87
+when: 1606381393.7996
